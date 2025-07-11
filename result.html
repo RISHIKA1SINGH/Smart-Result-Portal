@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Result - Cambridge High School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      padding: 40px;
+      color: #2c3e50;
+    }
+
+    .result-card {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: auto;
+      position: relative;
+    }
+
+    .college-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .college-header img {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .college-header h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .student-info {
+      margin-bottom: 25px;
+      font-size: 18px;
+    }
+
+    .marks-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .marks-table th,
+    .marks-table td {
+      border: 1px solid #ccc;
+      padding: 12px 15px;
+      text-align: center;
+    }
+
+    .marks-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    .summary {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .print-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .print-btn:hover {
+      background-color: #2980b9;
+    }
+
+    @media print {
+      .print-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="result-card">
+    <!-- College Header -->
+    <div class="college-header">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="College Logo">
+      <h1>Cambridge High School, Nagpur</h1>
+    </div>
+
+    <!-- Student Info -->
+    <div class="student-info">
+      <p>👤 <strong>Name:</strong> {{ student.name }}</p>
+      <p>🎓 <strong>Roll No:</strong> {{ student.roll_no }}</p>
+    </div>
+
+    <!-- Subject Marks Table -->
+    <table class="marks-table">
+      <tr>
+        <th>Subject</th>
+        <th>Marks</th>
+      </tr>
+      {% for subject, mark in student.marks.items() %}
+        {% if subject != 'aggregate' and subject != 'status' %}
+          <tr>
+            <td>{{ subject }}</td>
+            <td>{{ mark }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+
+    <!-- Summary -->
+    <div class="summary">
+      <p>📊 <strong>Aggregate:</strong>
+        {% if 'aggregate' in student.marks %}
+          {{ student.marks['aggregate'] }}%
+        {% else %}
+          N/A
+        {% endif %}
+      </p>
+      <p>📌 <strong>Status:</strong>
+        {% if 'status' in student.marks %}
+          {{ student.marks['status'] }}
+        {% else %}
+          N/A
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Print Button -->
+    <button class="print-btn" onclick="window.print()">🖨️ Download PDF</button>
+  </div>
+
+</body>
+</html>
